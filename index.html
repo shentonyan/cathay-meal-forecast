@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cathay Meal Forecast · Zero-Waste Inflight Catering Demo</title>
+<meta name="description" content="Cathay Hackathon 2026 demo: AI meal forecasting and pre-order to cut inflight food waste and cost.">
+<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts-more.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/modules/accessibility.js"></script>
+<style>
+:root{
+  --jade:#006564; --jade-2:#00857f; --jade-bg:#e6f1ef; --jade-line:#cfe3df;
+  --gold:#b8955a; --ink:#1b2a2a; --ink-2:#4d5c5c; --muted:#8a9898;
+  --bg:#f5f7f6; --card:#ffffff; --line:#e3e9e7;
+  --green:#1f9d61; --green-bg:#e7f6ee; --red:#d0443a; --red-bg:#fbeceb; --amber:#c98a12; --amber-bg:#fdf4e2;
+  --font:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  --mono:'SF Mono',Consolas,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);}
+header{background:var(--jade);color:#fff;padding:14px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.06em}
+.brand .logo{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--jade);display:grid;place-items:center;font-size:16px}
+.brand small{display:block;font-weight:400;letter-spacing:0;opacity:.8;font-size:12px}
+nav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+nav button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:13.5px;font-family:inherit;transition:all .15s}
+nav button:hover{background:rgba(255,255,255,.12)}
+nav button.active{background:#fff;color:var(--jade);border-color:#fff;font-weight:600}
+main{max-width:1240px;margin:0 auto;padding:24px 24px 60px}
+.tab{display:none}.tab.active{display:block;animation:fade .3s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{margin:0 0 4px;font-size:22px;color:var(--jade)}
+.lead{margin:0 0 20px;color:var(--ink-2);font-size:14.5px;max-width:900px;line-height:1.55}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{margin:0 0 12px;font-size:15px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.label{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.big{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--jade);line-height:1.15}
+.sub{font-size:12.5px;color:var(--ink-2)}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11.5px;font-weight:600}
+.pill.g{background:var(--green-bg);color:var(--green)}.pill.r{background:var(--red-bg);color:var(--red)}.pill.a{background:var(--amber-bg);color:var(--amber)}.pill.j{background:var(--jade-bg);color:var(--jade)}
+.btn{background:var(--jade);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}
+.btn:hover{background:var(--jade-2)}.btn.ghost{background:#fff;color:var(--jade);border:1px solid var(--jade-line)}.btn.ghost:hover{background:var(--jade-bg)}
+.btn:disabled{opacity:.5;cursor:default}
+select,input[type=number]{font-family:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line)}
+td.n{font-family:var(--mono);text-align:right}th.n{text-align:right}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+/* slider */
+.sl{margin-bottom:14px}
+.sl .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.sl .top b{font-family:var(--mono);color:var(--jade)}
+input[type=range]{width:100%;accent-color:var(--jade)}
+/* Passenger phone */
+.pwrap{display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start}
+.phone{background:#111;border-radius:38px;padding:12px;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.screen{background:#fff;border-radius:28px;overflow:hidden;min-height:690px;display:flex;flex-direction:column}
+.ph-head{background:var(--jade);color:#fff;padding:20px 18px 16px}
+.ph-head .route{display:flex;justify-content:space-between;align-items:center;font-size:26px;font-weight:700;margin:8px 0 2px}
+.ph-head .route span{font-size:14px;opacity:.7}
+.ph-body{padding:14px;flex:1;display:flex;flex-direction:column;gap:10px}
+.dish{border:1.5px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all .15s;background:#fff;text-align:left;font-family:inherit;width:100%}
+.dish:hover{border-color:var(--jade-line);background:#fafdfc}
+.dish.sel{border-color:var(--jade);background:var(--jade-bg)}
+.dish .emo{font-size:30px;width:46px;height:46px;display:grid;place-items:center;background:var(--bg);border-radius:12px}
+.dish .nm{font-weight:600;font-size:14px;color:var(--ink)}
+.dish .ds{font-size:12px;color:var(--ink-2);margin-top:2px}
+.dish .mi{margin-left:auto;text-align:right;font-size:11.5px;color:var(--gold);font-weight:700;white-space:nowrap}
+.nudge{font-size:11px;color:var(--amber);font-weight:600;margin-top:3px}
+.skip{border-style:dashed}
+.confirm{margin-top:auto}
+.done{text-align:center;padding:30px 10px}
+.done .chk{width:70px;height:70px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center;font-size:36px;margin:0 auto 12px}
+.miles{font-size:28px;font-weight:800;color:var(--gold);font-family:var(--mono)}
+.flow{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step .num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--jade);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.step p{margin:2px 0 0;font-size:13px;color:var(--ink-2);line-height:1.5}
+.bar{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar>div{height:100%;background:var(--jade);transition:width .4s}
+/* Forecast */
+.controls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.controls .f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.res .row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.res .row:last-child{border:none}
+.res .row b{font-family:var(--mono);font-size:15px}
+.vs{display:flex;gap:8px;align-items:baseline}
+.vs .old{color:var(--red);text-decoration:line-through;font-size:13px;font-family:var(--mono)}
+/* Dashboard */
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--jade)}
+.kpi.gold:before{background:var(--gold)}.kpi.green:before{background:var(--green)}
+.kpi .big{font-size:32px}
+.pillar{border-radius:12px;padding:18px;border:1px solid var(--line);background:#fff}
+.pillar h3{display:flex;align-items:center;gap:8px}
+.pillar .li{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.pillar .li b{font-family:var(--mono)}
+.pillar .li.tot{border:none;font-weight:700;font-size:15px;padding-top:10px}
+.presets{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.presets button{flex:1;min-width:90px}
+.presets button.on{background:var(--jade);color:#fff}
+.side{position:sticky;top:84px}
+.dash{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+@media(max-width:1000px){.dash,.pwrap,.g2,.g3,.g4{grid-template-columns:1fr}.side{position:static}}
+
+/* ---- phone / small screens ---- */
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:600px){
+  header{padding:10px 14px;gap:10px;position:static}
+  nav{margin-left:0;width:100%}
+  nav button{flex:1;padding:8px 6px;font-size:12px}
+  main{padding:16px 12px 40px}
+  h2{font-size:19px}
+  .lead{font-size:13.5px}
+  .big,.kpi .big{font-size:24px}
+  .card{padding:14px}
+  .controls .f{width:100%}
+  .controls select{width:100%}
+  .controls .btn{width:100%}
+  .phone{border-radius:30px;padding:8px}
+  .screen{border-radius:24px;min-height:0}
+  table{font-size:12.5px}
+  td,th{padding:7px 6px}
+}
+.pubfoot{max-width:1240px;margin:0 auto;padding:0 24px 28px;font-size:12px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">✈</div><div>CATHAY · MEAL FORECAST<small>Zero-waste inflight catering · Hackathon demo</small></div></div>
+  <nav>
+    <button data-tab="t1" class="active">① Passenger app</button>
+    <button data-tab="t2">② Flight forecast</button>
+    <button data-tab="t3">③ Impact dashboard</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============ TAB 1: PASSENGER ============ -->
+<section class="tab active" id="t1">
+  <h2>Choose My Meal, for every cabin</h2>
+  <p class="lead">Today Choose My Meal is open to First and Business only. In this concept, every passenger can pre-order or skip their meal 10 days to 24 hours before departure and earn Asia Miles for doing it. Each choice becomes a firm demand signal for the forecasting model.</p>
+  <div class="pwrap">
+    <div class="phone"><div class="screen">
+      <div class="ph-head">
+        <div style="font-size:12px;opacity:.8">Cathay app · Manage booking</div>
+        <div class="route">HKG <span>✈ 13h 00m</span> LHR</div>
+        <div style="font-size:13px;opacity:.9">CX 251 · Tonight 23:55 · Economy · Seat 47K</div>
+      </div>
+      <div class="ph-body" id="phBody"></div>
+    </div></div>
+
+    <div class="flow">
+      <div class="card">
+        <h3>What happens behind the scenes</h3>
+        <div class="step"><div class="num">1</div><div><b>Pre-order = certain demand</b><p>Pre-ordered meals are loaded exactly. The model only has to forecast passengers who haven't chosen, so every pre-order reduces uncertainty.</p></div></div>
+        <div class="step" style="margin-top:12px"><div class="num">2</div><div><b>Skip = one less meal loaded</b><p>Passengers who skip are taken out of the meal count. That cuts food and weight: <span id="skipImpact"></span>.</p></div></div>
+        <div class="step" style="margin-top:12px"><div class="num">3</div><div><b>The rest is forecast by AI</b><p>Gradient boosting predicts no-shows and dish shares by route, time, season and passenger mix. A newsvendor rule then sets how many of each dish to load.</p></div></div>
+      </div>
+      <div class="card">
+        <h3>Live: CX 251 Economy pre-orders</h3>
+        <div id="liveBox"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn ghost" id="sim50">+ Simulate 50 more passengers pre-ordering</button>
+          <button class="btn ghost" id="goFc">See the forecast →</button>
+        </div>
+        <p class="note" style="margin-top:10px">Miles rewards (+50 pre-order, +150 skip) are hypotheses to A/B test; industry pre-order uptake is only about 2–5% today.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 2: FORECAST ============ -->
+<section class="tab" id="t2">
+  <h2>Flight forecast &amp; loading optimiser</h2>
+  <p class="lead">For each flight the model predicts the boarded passenger count and a demand <i>distribution</i> for each dish. A newsvendor rule then loads the quantile of total meal demand that matches the chosen service level, and splits stock across dishes to protect first choices. Below, it is compared with the legacy rule (cater for 100% of bookings × fixed network ratio + 5% buffer) over 1,000 simulated flights.</p>
+  <div class="controls">
+    <div class="f">Flight<select id="fSel"></select></div>
+    <div class="f">Cabin<select id="cSel"><option value="eco">Economy</option><option value="biz">Business</option></select></div>
+    <div class="f" style="min-width:300px;flex:1">
+      <div class="sl" style="margin:0"><div class="top"><span>Service level: chance every passenger gets a meal (newsvendor critical ratio)</span><b id="slv">95%</b></div>
+      <input type="range" id="slSel" min="60" max="99" value="95"></div>
+    </div>
+    <button class="btn" id="runSim">▶ Simulate 1,000 flights</button>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:16px" id="fcKpis"></div>
+
+  <div class="grid g2">
+    <div class="card"><h3>Load plan by dish</h3><div id="loadChart" style="height:300px"></div>
+      <div class="tblwrap"><table id="dishTbl" style="margin-top:8px"></table></div>
+    </div>
+    <div class="card res"><h3>Simulation results <span class="sub" id="simTag">(per flight, average of 1,000 runs)</span></h3>
+      <div id="simRes"><p class="note">Press <b>Simulate 1,000 flights</b> to compare.</p></div>
+      <div id="tradeChart" style="height:250px;margin-top:6px"></div>
+      <button class="btn ghost" id="toDash" style="margin-top:10px;width:100%" disabled>Use this waste reduction in the Impact dashboard →</button>
+    </div>
+  </div>
+  <p class="note" style="margin-top:12px">All flights, bookings and dish shares are synthetic and illustrative. In production, Cathay load and return data would replace them. The simulation varies no-shows (binomial) and adds ±8% model error on dish shares. The AI load uses a newsvendor quantile on the total meal count, then splits stock across dishes so each dish has the same stock-out risk. The dashboard applies a 40% haircut to the simulated reduction to stay conservative.</p>
+</section>
+
+<!-- ============ TAB 3: DASHBOARD ============ -->
+<section class="tab" id="t3">
+  <h2>Network impact: what Cathay saves every year</h2>
+  <p class="lead">Scaled to the whole network, this shows two outcomes, <b style="color:var(--gold)">cost savings</b> and <b style="color:var(--green)">sustainability</b>. Adjust the assumptions on the left; every number updates live.</p>
+  <div class="dash">
+    <div class="card side">
+      <h3>Scenario</h3>
+      <div class="presets">
+        <button class="btn ghost" data-p="cons">Conservative</button>
+        <button class="btn ghost on" data-p="base">Base</button>
+        <button class="btn ghost" data-p="amb">KLM-level</button>
+      </div>
+      <div id="sliders"></div>
+      <p class="note">Baselines: IATA audits of 0.94 kg cabin waste per passenger, of which 18% is untouched meals (≈0.17 kg/pax). IATA rule of ~30 kg fuel per extra tonne per flight hour. KLM's AI cut waste by 63%. Other inputs are stated assumptions.</p>
+    </div>
+
+    <div>
+      <div class="grid g4" id="dashKpis"></div>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="pillar"><h3><span class="pill a">💰 COST</span> Annual savings (US$)</h3><div id="costList"></div></div>
+        <div class="pillar"><h3><span class="pill g">🌱 SUSTAINABILITY</span> Annual impact</h3><div id="susList"></div></div>
+      </div>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card"><h3>Where the money comes from</h3><div id="wfChart" style="height:300px"></div></div>
+        <div class="card"><h3>5-year rollout across the HKG network</h3><div id="rollChart" style="height:300px"></div></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h3>Monthly food waste: legacy vs AI-optimised loading (tonnes)</h3>
+        <div id="monthChart" style="height:260px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<div class="pubfoot">Cathay Hackathon 2026 concept demo. All flights, bookings, dish shares and costs are synthetic and illustrative; benchmarks from IATA and KLM are cited in the research report. Not an official Cathay Pacific product.</div>
+
+<script>
+/* ===================== DATA ===================== */
+const LEGACY = {eco:[0.40,0.40,0.20], biz:[0.30,0.30,0.25,0.15]};
+const FLIGHTS = [
+ {id:'CX 251',from:'HKG',to:'LHR',dep:'23:55',h:13.0,ns:0.045,
+  eco:{booked:241,d:[['🍜','Braised beef noodles'],['🍛','Chicken tikka masala & rice'],['🍝','Mushroom penne (V)']],p:[0.31,0.47,0.22],pre:[9,12,4],skip:2},
+  biz:{booked:41,d:[['🥩','Grilled beef tenderloin'],['🐟','Steamed garoupa, ginger & scallion'],['🍗','Hainanese chicken rice'],['🥗','Wild mushroom risotto (V)']],p:[0.30,0.24,0.31,0.15],pre:[9,6,8,3],skip:0}},
+ {id:'CX 880',from:'HKG',to:'LAX',dep:'11:00',h:13.0,ns:0.05,
+  eco:{booked:262,d:[['🍚','Pork char siu & rice'],['🍝','Beef ragù pasta'],['🥦','Vegetable stir-fry (V)']],p:[0.44,0.41,0.15],pre:[11,10,3],skip:1},
+  biz:{booked:36,d:[['🥩','Wagyu striploin'],['🐟','Miso black cod'],['🍜','Wonton noodle soup'],['🥗','Burrata & heirloom tomato (V)']],p:[0.36,0.22,0.27,0.15],pre:[8,5,7,3],skip:1}},
+ {id:'CX 845',from:'HKG',to:'JFK',dep:'16:15',h:16.0,ns:0.04,
+  eco:{booked:268,d:[['🍗','Roast chicken & potatoes'],['🍛','Beef curry & rice'],['🥬','Tofu & greens (V)']],p:[0.42,0.40,0.18],pre:[12,9,5],skip:2},
+  biz:{booked:39,d:[['🥩','Beef short rib'],['🦐','Prawn linguine'],['🍗','Soy chicken & rice'],['🥗','Quinoa bowl (V)']],p:[0.33,0.26,0.27,0.14],pre:[10,6,6,4],skip:0}},
+ {id:'CX 101',from:'HKG',to:'SYD',dep:'20:30',h:9.0,ns:0.05,
+  eco:{booked:255,d:[['🐟','Barramundi & rice'],['🍜','Chicken laksa'],['🥦','Veg lasagne (V)']],p:[0.34,0.45,0.21],pre:[6,8,3],skip:1},
+  biz:{booked:38,d:[['🥩','Lamb rack'],['🐟','Salmon teriyaki'],['🍗','Chicken congee'],['🥗','Pumpkin gnocchi (V)']],p:[0.32,0.28,0.24,0.16],pre:[7,6,5,2],skip:1}},
+ {id:'CX 715',from:'HKG',to:'SIN',dep:'09:30',h:4.0,ns:0.06,
+  eco:{booked:276,d:[['🍳','Scrambled egg & sausage'],['🥣','Fish congee'],['🥞','Pancakes & fruit (V)']],p:[0.42,0.38,0.20],pre:[4,5,2],skip:3},
+  biz:{booked:36,d:[['🍳','Eggs Benedict'],['🥣','Abalone congee'],['🥟','Dim sum selection'],['🥗','Fruit & yoghurt (V)']],p:[0.26,0.30,0.30,0.14],pre:[5,6,6,2],skip:1}},
+ {id:'CX 402',from:'HKG',to:'TPE',dep:'14:05',h:1.75,ns:0.07,
+  eco:{booked:288,d:[['🥪','Chicken sandwich'],['🍙','Pork bun & fruit'],['🥗','Veg wrap (V)']],p:[0.45,0.40,0.15],pre:[2,3,1],skip:6},
+  biz:{booked:34,d:[['🍜','Beef noodle soup'],['🐟','Seared fish & rice'],['🥟','Dim sum trio'],['🥗','Garden salad (V)']],p:[0.34,0.22,0.30,0.14],pre:[3,2,3,1],skip:2}},
+];
+const MEAL_KG = {eco:0.55, biz:0.85};
+
+/* ===================== MATH ===================== */
+function randn(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function invNorm(p){ // Acklam
+  const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924],
+  b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857],
+  c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878],
+  d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
+  const pl=0.02425; let q,r;
+  if(p<pl){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  q=p-0.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const fmt=(n,d=0)=>Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const money=n=>{const a=Math.abs(n);const s=n<0?'-':'';return a>=1e6?s+'$'+fmt(a/1e6,1)+'M':a>=1e3?s+'$'+fmt(a/1e3,0)+'K':s+'$'+fmt(a,0);};
+
+/* ---- load plans ---- */
+function plans(f,cab,sl){
+  const C=f[cab], k=C.d.length, pre=C.pre, preT=sum(pre);
+  const legacy = LEGACY[cab].map(s=>Math.ceil(C.booked*s*1.05));
+  const nsSd = Math.sqrt(C.booked*f.ns*(1-f.ns) + Math.pow(C.booked*0.015,2));
+  const boardedMu = C.booked*(1-f.ns);
+  const eatMu = boardedMu - C.skip*(1-f.ns);
+  const open = Math.max(0, eatMu - preT*(1-f.ns));
+  const z = invNorm(sl);
+  // Newsvendor on TOTAL meals (substitution between dishes is possible)
+  const Qtot = Math.ceil(eatMu + z*nsSd);
+  const mu=[], sd=[];
+  for(let i=0;i<k;i++){
+    const p=C.p[i];
+    mu[i]=open*p;
+    sd[i]=Math.sqrt(open*p*(1-p) + Math.pow(open*p*0.08,2));
+  }
+  // Split open stock across dishes so every dish has the same stock-out risk
+  const O = Math.max(0, Qtot - preT);
+  const zd = (O - sum(mu))/Math.max(1e-6,sum(sd));
+  let ai = mu.map((m,i)=>pre[i]+Math.max(0,Math.round(m+zd*sd[i])));
+  let diff = Qtot - sum(ai), j=0;
+  const order = C.p.map((p,i)=>i).sort((a,b)=>C.p[b]-C.p[a]);
+  while(diff!==0 && j<200){const i=order[j%k]; if(diff>0){ai[i]++;diff--;} else if(ai[i]>pre[i]){ai[i]--;diff++;} j++;}
+  return {legacy, ai, mu, sd, pre, z, Qtot};
+}
+
+/* ---- Monte Carlo ---- */
+function runMC(f,cab,pl,n){
+  const C=f[cab],k=C.d.length;
+  const R={legacy:{w:0,fc:0,hungry:0,pax:0},ai:{w:0,fc:0,hungry:0,pax:0}};
+  for(let s=0;s<n;s++){
+    const nsT=Math.max(0,f.ns+randn()*0.015);
+    let boarded=0; for(let i=0;i<C.booked;i++) if(Math.random()>nsT) boarded++;
+    // true shares with model error
+    let pt=C.p.map(p=>p*Math.exp(randn()*0.08)); const ps=sum(pt); pt=pt.map(x=>x/ps);
+    const preB=C.pre.map(x=>Math.round(x*boarded/C.booked));
+    const skipB=Math.round(C.skip*boarded/C.booked);
+    const open=Math.max(0,boarded-sum(preB)-skipB);
+    const dem=preB.slice();
+    for(let i=0;i<open;i++){let r=Math.random(),j=0,acc=pt[0];while(r>acc&&j<k-1){j++;acc+=pt[j];}dem[j]++;}
+    const eaters=boarded-skipB;
+    for(const key of ['legacy','ai']){
+      const L=pl[key]; let miss=0;
+      for(let i=0;i<k;i++) miss+=Math.max(0,dem[i]-L[i]);
+      const tl=sum(L), served=Math.min(eaters,tl);
+      R[key].w+=tl-served; R[key].fc+=eaters-miss; R[key].hungry+=eaters-served; R[key].pax+=eaters;
+    }
+  }
+  for(const key of ['legacy','ai']){const o=R[key];o.fcRate=o.fc/o.pax;o.w/=n;o.hungry/=n;}
+  return R;
+}
+
+/* ===================== TAB SWITCH ===================== */
+const charts={};
+function show(t){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.id===t));
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>Object.values(charts).forEach(c=>c&&c.reflow&&c.reflow()),60);
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+
+Highcharts.setOptions({chart:{style:{fontFamily:"'Segoe UI',Roboto,Arial,sans-serif"},backgroundColor:'transparent'},credits:{enabled:false},title:{text:null},
+  colors:['#c9cfcd','#006564','#b8955a','#1f9d61','#d0443a'],legend:{itemStyle:{fontWeight:'500',color:'#4d5c5c'}}});
+
+/* ===================== TAB 1: PASSENGER ===================== */
+const CX251=FLIGHTS[0];
+let pState={sel:null,done:false,miles:0};
+function renderPhone(){
+  const C=CX251.eco, el=document.getElementById('phBody');
+  if(pState.done){
+    const skip=pState.sel==='skip';
+    el.innerHTML=`<div class="done"><div class="chk">✓</div>
+      <div style="font-weight:700;font-size:18px">${skip?'Meal skipped, thank you!':'Your meal is reserved'}</div>
+      <div class="sub" style="margin:6px 0 16px">${skip?'One less meal will be loaded on CX 251.':C.d[pState.sel][0]+' '+C.d[pState.sel][1]+' is guaranteed for seat 47K.'}</div>
+      <div class="miles">+${pState.miles}</div><div class="sub">Asia Miles credited after your flight</div>
+      <div class="card" style="margin-top:18px;text-align:left;background:var(--green-bg);border-color:transparent">
+        <div class="label" style="color:var(--green)">Your impact on this flight</div>
+        <div style="font-size:13px;margin-top:6px;line-height:1.6">${skip?
+          `🍱 ${MEAL_KG.eco} kg of food not produced<br>⛽ ${fmt(MEAL_KG.eco*0.03*CX251.h*1.5,2)} kg less fuel burned<br>🌍 ${fmt(MEAL_KG.eco*0.03*CX251.h*1.5*3.16+MEAL_KG.eco*2.5,1)} kg CO₂e avoided`:
+          `🎯 Your pre-order removes 1 passenger of uncertainty, so the model loads fewer spare meals.<br>🍱 ≈ ${fmt(MEAL_KG.eco*0.6,2)} kg less spare food carried`}</div></div>
+      <button class="btn ghost" style="margin-top:16px" onclick="pState={sel:null,done:false,miles:0};renderPhone()">Try again as another passenger</button></div>`;
+    return;
+  }
+  const preT=sum(C.pre), share=C.pre.map(x=>x/Math.max(1,preT));
+  const top=share.indexOf(Math.max(...share));
+  let h=`<div style="font-weight:700;font-size:16px">Choose your main course</div>
+    <div class="sub" style="margin-top:-4px">Ordering closes 24h before departure</div>`;
+  C.d.forEach((d,i)=>{
+    h+=`<button class="dish ${pState.sel===i?'sel':''}" onclick="pState.sel=${i};renderPhone()">
+      <div class="emo">${d[0]}</div><div><div class="nm">${d[1]}</div>
+      <div class="ds">${['Hong Kong favourite','Chef\'s recommendation','Plant-based · lower carbon'][i]}</div>
+      ${i===top?`<div class="nudge">🔥 Most popular on this flight, may run out on board</div>`:''}</div>
+      <div class="mi">+50<br>miles</div></button>`;
+  });
+  h+=`<button class="dish skip ${pState.sel==='skip'?'sel':''}" onclick="pState.sel='skip';renderPhone()">
+      <div class="emo">🌙</div><div><div class="nm">Skip the meal, I'll sleep</div><div class="ds">We won't load a meal for you. Snacks remain available.</div></div>
+      <div class="mi">+150<br>miles</div></button>
+    <button class="btn confirm" ${pState.sel===null?'disabled':''} onclick="confirmMeal()">Confirm choice</button>`;
+  el.innerHTML=h;
+}
+function confirmMeal(){
+  const C=CX251.eco;
+  if(pState.sel==='skip'){C.skip++;pState.miles=150;}else{C.pre[pState.sel]++;pState.miles=50;}
+  pState.done=true; renderPhone(); renderLive(); renderForecast();
+}
+function renderLive(){
+  const C=CX251.eco, preT=sum(C.pre), tot=preT+C.skip, pct=tot/C.booked;
+  let h=`<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>${tot} of ${C.booked} passengers have decided</span><b style="font-family:var(--mono);color:var(--jade)">${fmt(pct*100,1)}%</b></div>
+    <div class="bar"><div style="width:${Math.min(100,pct*100)}%"></div></div><table style="margin-top:10px">`;
+  C.d.forEach((d,i)=>h+=`<tr><td>${d[0]} ${d[1]}</td><td class="n">${C.pre[i]}</td></tr>`);
+  h+=`<tr><td>🌙 Skip meal</td><td class="n">${C.skip}</td></tr></table>`;
+  document.getElementById('liveBox').innerHTML=h;
+}
+document.getElementById('skipImpact').textContent=`≈${MEAL_KG.eco} kg food and ≈${fmt(MEAL_KG.eco*0.03*13*1.5*3.16+MEAL_KG.eco*2.5,1)} kg CO₂e per skipped meal on a 13h flight`;
+document.getElementById('sim50').onclick=()=>{
+  const C=CX251.eco;
+  for(let i=0;i<50;i++){ if(sum(C.pre)+C.skip>=C.booked)break; const r=Math.random();
+    if(r<0.12)C.skip++; else{let x=Math.random(),j=0,acc=C.p[0];while(x>acc&&j<C.p.length-1){j++;acc+=C.p[j];}C.pre[j]++;} }
+  renderLive(); renderPhone(); renderForecast();
+};
+document.getElementById('goFc').onclick=()=>{document.getElementById('fSel').value=0;document.getElementById('cSel').value='eco';renderForecast();show('t2');};
+
+/* ===================== TAB 2: FORECAST ===================== */
+const fSel=document.getElementById('fSel'),cSel=document.getElementById('cSel'),slSel=document.getElementById('slSel');
+FLIGHTS.forEach((f,i)=>fSel.innerHTML+=`<option value="${i}">${f.id} · ${f.from}→${f.to} · ${f.dep} · ${f.h}h</option>`);
+let lastRed=null;
+function cur(){return {f:FLIGHTS[+fSel.value],cab:cSel.value,sl:+slSel.value/100};}
+function renderForecast(){
+  const {f,cab,sl}=cur(), C=f[cab], P=plans(f,cab,sl);
+  document.getElementById('slv').textContent=Math.round(sl*100)+'%';
+  const preT=sum(C.pre), board=C.booked*(1-f.ns);
+  document.getElementById('fcKpis').innerHTML=`
+   <div class="kpi"><div class="label">Booked</div><div class="big">${C.booked}</div><div class="sub">${cab==='eco'?'Economy':'Business'} cabin</div></div>
+   <div class="kpi"><div class="label">Predicted no-shows</div><div class="big">${fmt(C.booked*f.ns,1)}</div><div class="sub">${fmt(f.ns*100,1)}% · route/time model</div></div>
+   <div class="kpi gold"><div class="label">Pre-ordered / skipped</div><div class="big">${preT} / ${C.skip}</div><div class="sub">${fmt((preT+C.skip)/C.booked*100,1)}% certain demand</div></div>
+   <div class="kpi green"><div class="label">Meals loaded</div><div class="big">${sum(P.ai)}</div><div class="sub"><span class="old" style="color:var(--red);text-decoration:line-through">${sum(P.legacy)}</span> legacy · <span class="pill g">-${sum(P.legacy)-sum(P.ai)}</span></div></div>`;
+  let t=`<tr><th>Dish</th><th class="n">Pre-order</th><th class="n">Forecast μ ± σ</th><th class="n">Legacy</th><th class="n">AI load</th></tr>`;
+  C.d.forEach((d,i)=>t+=`<tr><td>${d[0]} ${d[1]}</td><td class="n">${C.pre[i]}</td><td class="n">${fmt(C.pre[i]+P.mu[i],0)} ± ${fmt(P.sd[i],1)}</td><td class="n">${P.legacy[i]}</td><td class="n"><b>${P.ai[i]}</b></td></tr>`);
+  document.getElementById('dishTbl').innerHTML=t;
+  const cats=C.d.map(d=>d[0]+' '+d[1]);
+  const opts={chart:{type:'column'},xAxis:{categories:cats,labels:{style:{fontSize:'11px'}}},yAxis:{title:{text:'Meals'}},
+    tooltip:{shared:true},plotOptions:{column:{borderRadius:3,groupPadding:0.12}},
+    series:[{name:'Legacy load',data:P.legacy,color:'#c9cfcd'},{name:'AI load',data:P.ai,color:'#006564'},
+      {name:'Expected demand',type:'errorbar',data:C.d.map((_,i)=>[Math.max(0,C.pre[i]+P.mu[i]-P.sd[i]),C.pre[i]+P.mu[i]+P.sd[i]]),color:'#b8955a',stemWidth:2,whiskerLength:14,tooltip:{pointFormat:'Demand ±1σ: <b>{point.low:.0f}–{point.high:.0f}</b><br/>'}}]};
+  if(charts.load){charts.load.destroy();} charts.load=Highcharts.chart('loadChart',opts);
+}
+[fSel,cSel].forEach(e=>e.onchange=()=>{renderForecast();clearSim();});
+slSel.oninput=()=>{renderForecast();};
+function clearSim(){document.getElementById('simRes').innerHTML='<p class="note">Press <b>Simulate 1,000 flights</b> to compare.</p>';if(charts.trade){charts.trade.destroy();charts.trade=null;}document.getElementById('toDash').disabled=true;}
+document.getElementById('runSim').onclick=()=>{
+  const btn=document.getElementById('runSim'); btn.disabled=true; btn.textContent='Simulating…';
+  setTimeout(()=>{
+    const {f,cab,sl}=cur(), P=plans(f,cab,sl), R=runMC(f,cab,P,1000), kg=MEAL_KG[cab];
+    const red=1-R.ai.w/R.legacy.w; lastRed=red;
+    const kgS=(R.legacy.w-R.ai.w)*kg, fuel=kgS*1.5*0.03*f.h;
+    document.getElementById('simRes').innerHTML=`
+      <div class="row"><span>Meals wasted per flight</span><span class="vs"><span class="old">${fmt(R.legacy.w,1)}</span><b>${fmt(R.ai.w,1)}</b> <span class="pill g">-${fmt(red*100,0)}%</span></span></div>
+      <div class="row"><span>First-choice availability</span><span class="vs"><span class="old" style="text-decoration:none;color:var(--ink-2)">${fmt(R.legacy.fcRate*100,1)}%</span><b>${fmt(R.ai.fcRate*100,1)}%</b></span></div>
+      <div class="row"><span>Passengers with no meal (per flight)</span><b>${fmt(R.ai.hungry,2)}</b></div>
+      <div class="row"><span>Food saved per flight</span><b>${fmt(kgS,1)} kg</b></div>
+      <div class="row"><span>Fuel saved per flight (incl. packaging)</span><b>${fmt(fuel,2)} kg</b></div>`;
+    // trade-off curve
+    const pts=[]; for(const s of [0.6,0.7,0.8,0.9,0.95,0.98,0.99]){const p2=plans(f,cab,s),r2=runMC(f,cab,p2,250);pts.push({x:+(r2.ai.fcRate*100).toFixed(2),y:+r2.ai.w.toFixed(2),sl:s});}
+    if(charts.trade)charts.trade.destroy();
+    charts.trade=Highcharts.chart('tradeChart',{chart:{type:'line'},
+      xAxis:{title:{text:'First-choice availability (%)'}},yAxis:{title:{text:'Meals wasted / flight'},min:0},
+      tooltip:{formatter(){return this.series.name==='Legacy rule'?`<b>Legacy</b><br>${this.x}% first choice · ${this.y} wasted`:`Service level ${Math.round(this.point.sl*100)}%<br>${this.x}% first choice · <b>${this.y}</b> wasted`;}},
+      series:[{name:'AI frontier (newsvendor)',data:pts,color:'#006564',marker:{radius:4}},
+        {name:'Legacy rule',type:'scatter',data:[[+(R.legacy.fcRate*100).toFixed(2),+R.legacy.w.toFixed(2)]],color:'#d0443a',marker:{radius:7,symbol:'diamond'}}]});
+    document.getElementById('toDash').disabled=false;
+    btn.disabled=false; btn.textContent='▶ Simulate 1,000 flights';
+  },30);
+};
+document.getElementById('toDash').onclick=()=>{ if(lastRed!=null){S.red.v=Math.round(Math.min(80,Math.max(5,lastRed*100*0.6)));buildSliders();calc();} show('t3'); };
+
+/* ===================== TAB 3: DASHBOARD ===================== */
+const S={
+ pax:{l:'Full-service passengers / year',u:'M',v:25,min:5,max:40,st:1},
+ kg:{l:'Untouched food per passenger (baseline)',u:' kg',v:0.17,min:0.05,max:0.40,st:0.01},
+ red:{l:'Waste reduction from AI forecasting',u:'%',v:35,min:5,max:80,st:1},
+ up:{l:'Pre-order / skip uptake (with miles)',u:'%',v:15,min:0,max:60,st:1},
+ cost:{l:'Average cost per meal',u:' US$',v:6,min:2,max:30,st:0.5},
+ mkg:{l:'Average meal weight',u:' kg',v:0.5,min:0.3,max:1.0,st:0.05},
+ bh:{l:'Average block time',u:' h',v:5,min:1,max:16,st:0.5},
+ fuel:{l:'Jet fuel price',u:' US$/t',v:750,min:400,max:1400,st:25},
+};
+const PRE={cons:{red:20,up:5},base:{red:35,up:15},amb:{red:63,up:30}};
+const K={preEff:0.5,pack:1.5,co2f:3.16,embodied:2.5,disp:250,miles:50,mileCost:0.006,platform:1.5e6,car:4.6};
+function buildSliders(){
+  let h='';for(const [k,o] of Object.entries(S)){
+    const disp=o.u.trim()==='US$'?'$'+o.v:o.v+o.u;
+    h+=`<div class="sl"><div class="top"><span>${o.l}</span><b id="v_${k}">${disp}</b></div><input type="range" min="${o.min}" max="${o.max}" step="${o.st}" value="${o.v}" data-k="${k}"></div>`;}
+  const el=document.getElementById('sliders');el.innerHTML=h;
+  el.querySelectorAll('input').forEach(i=>i.oninput=()=>{const o=S[i.dataset.k];o.v=+i.value;document.getElementById('v_'+i.dataset.k).textContent=o.u.trim()==='US$'?'$'+o.v:o.v+o.u;
+    document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('on'));calc();});
+}
+document.querySelectorAll('.presets button').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];S.red.v=p.red;S.up.v=p.up;
+  document.querySelectorAll('.presets button').forEach(x=>x.classList.toggle('on',x===b));buildSliders();calc();});
+
+function model(scale=1, upScale=1){
+  const pax=S.pax.v*1e6*scale, up=S.up.v/100*upScale;
+  const red=1-(1-S.red.v/100)*(1-up*K.preEff);
+  const baseKg=pax*S.kg.v, foodKg=baseKg*red;
+  const meals=foodKg/S.mkg.v;
+  const fuelT=foodKg*K.pack*0.03*S.bh.v/1000;
+  const co2Fuel=fuelT*K.co2f, co2Food=foodKg/1000*K.embodied;
+  const sMeal=meals*S.cost.v, sFuel=fuelT*S.fuel.v, sDisp=foodKg/1000*K.disp;
+  const cInc=pax*up*K.miles*K.mileCost, cPlat=K.platform*(scale>0?1:0);
+  return {pax,red,baseT:baseKg/1000,foodT:foodKg/1000,meals,fuelT,co2Fuel,co2Food,sMeal,sFuel,sDisp,cInc,cPlat,net:sMeal+sFuel+sDisp-cInc-cPlat};
+}
+function animate(el,to,f){const from=+(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();
+  function step(t){const k=Math.min(1,(t-t0)/450),e=1-Math.pow(1-k,3);el.textContent=f(from+(to-from)*e);if(k<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+function calc(){
+  const M=model();
+  const kp=document.getElementById('dashKpis');
+  if(!kp.children.length){kp.innerHTML=`
+    <div class="kpi gold"><div class="label">Net savings / year</div><div class="big" id="k1" style="color:var(--gold)">–</div><div class="sub" id="k1s"></div></div>
+    <div class="kpi green"><div class="label">Food waste avoided / year</div><div class="big" id="k2" style="color:var(--green)">–</div><div class="sub" id="k2s"></div></div>
+    <div class="kpi green"><div class="label">CO₂e avoided / year</div><div class="big" id="k3" style="color:var(--green)">–</div><div class="sub" id="k3s"></div></div>
+    <div class="kpi"><div class="label">Meals not wasted / year</div><div class="big" id="k4">–</div><div class="sub" id="k4s"></div></div>`;}
+  animate(document.getElementById('k1'),M.net/1e6,v=>'$'+fmt(v,1)+'M');
+  animate(document.getElementById('k2'),M.foodT,v=>fmt(v,0)+' t');
+  animate(document.getElementById('k3'),M.co2Fuel+M.co2Food,v=>fmt(v,0)+' t');
+  animate(document.getElementById('k4'),M.meals/1e6,v=>fmt(v,2)+'M');
+  document.getElementById('k1s').textContent=`≈ HK$${fmt(M.net*7.8/1e6,0)}M · ROI ${fmt((M.net)/(M.cInc+M.cPlat),1)}× on running cost`;
+  document.getElementById('k2s').textContent=`${fmt(M.red*100,0)}% of ${fmt(M.baseT,0)} t untouched food`;
+  document.getElementById('k3s').textContent=`≈ ${fmt((M.co2Fuel+M.co2Food)/K.car,0)} cars off the road for a year`;
+  document.getElementById('k4s').textContent=`≈ ${fmt(M.meals/365,0)} meals saved every day`;
+
+  document.getElementById('costList').innerHTML=`
+    <div class="li"><span>🍱 Meal production avoided</span><b>${money(M.sMeal)}</b></div>
+    <div class="li"><span>⛽ Fuel (lighter aircraft)</span><b>${money(M.sFuel)}</b></div>
+    <div class="li"><span>🔥 Catering-waste incineration fees</span><b>${money(M.sDisp)}</b></div>
+    <div class="li"><span>✈ Asia Miles incentives</span><b style="color:var(--red)">${money(-M.cInc)}</b></div>
+    <div class="li"><span>💻 Platform running cost</span><b style="color:var(--red)">${money(-M.cPlat)}</b></div>
+    <div class="li tot"><span>Net annual savings</span><b style="color:var(--gold)">${money(M.net)}</b></div>`;
+  document.getElementById('susList').innerHTML=`
+    <div class="li"><span>🍱 Food waste avoided</span><b>${fmt(M.foodT,0)} t</b></div>
+    <div class="li"><span>🍽 Meals not thrown away</span><b>${fmt(M.meals/1e6,2)}M</b></div>
+    <div class="li"><span>⛽ Jet fuel saved</span><b>${fmt(M.fuelT,0)} t</b></div>
+    <div class="li"><span>🌍 CO₂ from fuel</span><b>${fmt(M.co2Fuel,0)} t</b></div>
+    <div class="li"><span>🌾 CO₂e embodied in food production</span><b>${fmt(M.co2Food,0)} t</b></div>
+    <div class="li tot"><span>Total CO₂e avoided</span><b style="color:var(--green)">${fmt(M.co2Fuel+M.co2Food,0)} t</b></div>`;
+
+  const wf=[{name:'Meals',y:M.sMeal/1e6,color:'#b8955a'},{name:'Fuel',y:M.sFuel/1e6,color:'#c9a874'},{name:'Disposal',y:M.sDisp/1e6,color:'#d9c299'},
+    {name:'Miles cost',y:-M.cInc/1e6,color:'#d0443a'},{name:'Platform',y:-M.cPlat/1e6,color:'#e07a72'},{name:'Net',isSum:true,color:'#006564'}];
+  if(charts.wf){charts.wf.series[0].setData(wf,true);}else{
+    charts.wf=Highcharts.chart('wfChart',{chart:{type:'waterfall'},xAxis:{type:'category'},yAxis:{title:{text:'US$ million / year'}},legend:{enabled:false},
+      tooltip:{pointFormat:'<b>${point.y:,.2f}M</b>'},series:[{data:wf,borderRadius:3,dataLabels:{enabled:true,format:'{point.y:,.1f}',style:{fontSize:'11px'}}}]});}
+
+  const ramp=[[0.15,0.5],[0.5,0.75],[0.85,1],[1,1],[1,1]];
+  let cum=-2e6; const food=[],cumA=[];
+  ramp.forEach(([sc,us])=>{const m=model(sc,us);food.push(+m.foodT.toFixed(0));cum+=m.net;cumA.push(+(cum/1e6).toFixed(1));});
+  const yrs=['Y1 · Pilot (long-haul)','Y2 · All long-haul','Y3 · + Regional','Y4 · Full network','Y5'];
+  if(charts.roll){charts.roll.series[0].setData(food,false);charts.roll.series[1].setData(cumA,true);}else{
+    charts.roll=Highcharts.chart('rollChart',{xAxis:{categories:yrs,labels:{style:{fontSize:'10.5px'}}},
+      yAxis:[{title:{text:'Food avoided (t)'}},{title:{text:'Cumulative net (US$M)'},opposite:true}],tooltip:{shared:true},
+      series:[{type:'column',name:'Food waste avoided (t)',data:food,color:'#1f9d61',borderRadius:3},
+        {type:'spline',name:'Cumulative net savings (US$M, after $2M build)',data:cumA,yAxis:1,color:'#b8955a',marker:{radius:4}}]});}
+
+  const season=[0.92,0.85,0.93,0.98,0.97,1.02,1.12,1.14,0.98,1.0,1.0,1.09];
+  const leg=season.map(s=>+(M.baseT/12*s).toFixed(0)), ai=season.map(s=>+(M.baseT/12*s*(1-M.red)).toFixed(0));
+  if(charts.mon){charts.mon.series[0].setData(leg,false);charts.mon.series[1].setData(ai,true);}else{
+    charts.mon=Highcharts.chart('monthChart',{chart:{type:'areaspline'},xAxis:{categories:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']},
+      yAxis:{title:{text:'Tonnes'}},tooltip:{shared:true,valueSuffix:' t'},plotOptions:{areaspline:{fillOpacity:0.25,marker:{enabled:false}}},
+      series:[{name:'Legacy loading',data:leg,color:'#d0443a'},{name:'AI-optimised',data:ai,color:'#006564'}]});}
+}
+
+/* ===================== INIT ===================== */
+renderPhone(); renderLive(); renderForecast(); buildSliders(); calc();
+</script>
+</body>
+</html>
