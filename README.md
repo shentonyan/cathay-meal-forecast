@@ -4,7 +4,7 @@
 
 **[Live demo](https://shentonyan.github.io/cathay-meal-forecast/)** · **[Poster](https://shentonyan.github.io/cathay-meal-forecast/poster.html)** · **[Research report](https://shentonyan.github.io/cathay-meal-forecast/research.html)** · **[Pitch deck (PPTX)](pitch/cathay_meal_forecast_pitch.pptx)**
 
-![Cover slide](pitch/slides/slide-01.png)
+[![Cathay Meal Forecast project poster](media/readme-poster.png)](media/readme-poster.png)
 
 ---
 
