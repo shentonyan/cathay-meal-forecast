@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<!-- design
+archetype: data board with a slim illustrated header · canvas A4 portrait 794px wide, min 210/297 ratio, grows if needed
+palette: #FBFAF6 ground · #006564 jade accent · #B8955A gold second · #0B3B3C ink · type: title 42px / section 17px / body 12.5px / label 10.5px
+finding: AI loads fewer meals overall but MORE of the dish people want (legacy over-loads beef by 27, under-loads chicken) → finding-dish; ~95% of savings come from meals never cooked → impact-cost
+blocks: header · problem (stat-1..4) · how (step-1..3) · sim (sim-bars, finding-dish) · bench · impact (impact-cost, impact-sus) · why · qr · sources
+pictures: assets/meal-tray.png — "Flat vector illustration of an airline economy meal tray seen from a 45-degree top angle ... deep jade green #006564, soft mint #E6F1EF, warm gold #B8955A and white ... isolated on a plain neutral background" · assets/demo-qr-plain.png — QR for https://shentonyan.github.io/cathay-meal-forecast/
+sources: IATA cabin waste audits & fact sheet (2023–24) · KLM via Onboard Hospitality / AviationA2Z (2024) · Winnow (website) · Aghazadeh 2025 citing Rodrigues et al. 2024 · Cathay Pacific Choose My Meal page, news releases 2017/2025 · team simulation (synthetic)
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cathay Meal Forecast · Poster</title>
+<style>
+  :root{
+    --ground:#FBFAF6; --ink:#0B3B3C; --jade:#006564; --jade-2:#00857F; --mint:#E6F1EF;
+    --gold:#B8955A; --gold-d:#8C6D35; --gold-bg:#F6F0E4; --muted:#55666A; --line:#DDE7E5;
+    --red:#C2410C; --green:#15803D; --green-bg:#E9F6EE;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#E9EEEC;font-family:'Segoe UI',var(--font-sans,'Helvetica Neue',Arial),sans-serif;color:var(--ink);}
+  .poster{position:relative;width:794px;max-width:100%;margin:24px auto;aspect-ratio:210/297;background:var(--ground);
+    display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.12);}
+  .pad{padding:0 30px}
+  .label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  h2{font-size:17px;margin:0 0 10px;color:var(--jade);display:flex;align-items:baseline;gap:8px}
+  h2 .n{font-size:11px;color:var(--gold-d);font-weight:800;letter-spacing:.1em}
+  p{margin:0}
+  .mono{font-family:Consolas,'SF Mono',Menlo,monospace}
+
+  /* header */
+  .hdr{background:var(--jade);color:#fff;display:grid;grid-template-columns:1fr 200px;gap:10px;padding:26px 30px 22px;position:relative}
+  .hdr:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--gold)}
+  .hdr .label{color:#E9D6AE}
+  .hdr h1{font-size:42px;line-height:1.02;margin:8px 0 8px;font-weight:800;letter-spacing:-.01em}
+  .hdr .sub{font-size:15px;line-height:1.4;color:#D6E8E5;max-width:440px}
+  .hdr .tag{margin-top:12px;font-size:16px;font-style:italic;font-weight:700;color:#E9D6AE}
+  .hdr img{width:200px;height:200px;object-fit:contain;align-self:center;margin:-14px 0 -18px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
+
+  /* blocks */
+  .sec{margin-top:16px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 12px 11px;border-top:3px solid var(--jade)}
+  .stat .v{font-size:25px;font-weight:800;line-height:1.05}
+  .stat .d{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+  .stat.alert{border-top-color:var(--red)} .stat.alert .v{color:var(--red)}
+
+  .steps{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr;align-items:stretch}
+  .step{background:var(--mint);border-radius:10px;padding:12px 13px}
+  .step .k{font-size:22px;font-weight:800;color:var(--jade);line-height:1}
+  .step .t{font-size:13.5px;font-weight:700;margin:6px 0 4px}
+  .step .d{font-size:11.5px;color:var(--muted);line-height:1.4}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;font-weight:800}
+
+  .two{display:grid;grid-template-columns:1.12fr 1fr;gap:12px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 15px}
+  .card h3{font-size:13.5px;margin:0 0 2px}
+  .card .cap{font-size:10.5px;color:var(--muted);margin-bottom:10px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 58px;align-items:center;gap:8px;margin:7px 0;font-size:11.5px}
+  .track{height:18px;background:#EEF3F2;border-radius:4px;position:relative;overflow:hidden}
+  .fill{position:absolute;top:0;bottom:0;left:0;border-radius:4px}
+  .val{font-weight:800;font-size:13px;text-align:right}
+  .hatch{background:repeating-linear-gradient(45deg,var(--gold) 0 6px,#CFB27E 6px 12px)}
+  .dish{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
+  .dish th{text-align:left;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 6px;border-bottom:1px solid var(--line)}
+  .dish td{padding:4px 6px;border-bottom:1px solid #EEF3F2}
+  .dish td.n{text-align:right;font-family:Consolas,'SF Mono',Menlo,monospace}
+  .up{color:var(--green);font-weight:700}.dn{color:var(--red);font-weight:700}
+  .finding{margin-top:10px;background:var(--gold-bg);border-left:3px solid var(--gold);padding:8px 10px;border-radius:4px;font-size:11.5px;line-height:1.45}
+  .finding b{color:var(--gold-d)}
+
+  .impact{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pillar{border-radius:10px;padding:14px 16px;border:1px solid var(--line);background:#fff}
+  .pillar .tagp{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px}
+  .pillar .hero{font-size:36px;font-weight:800;line-height:1.05;margin:8px 0 2px}
+  .pillar .hs{font-size:11.5px;color:var(--muted)}
+  .stack{display:flex;height:20px;border-radius:4px;overflow:hidden;margin:12px 0 6px}
+  .stack div{height:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;color:var(--muted)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  .pillar .note{font-size:11.5px;margin-top:8px;line-height:1.4}
+
+  .foot{display:grid;grid-template-columns:1fr 196px;gap:12px;align-items:stretch}
+  .why{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .why .w{border-left:3px solid var(--jade);padding:2px 0 2px 10px}
+  .why .v{font-size:19px;font-weight:800;color:var(--jade)}
+  .why .d{font-size:11px;color:var(--muted);line-height:1.38;margin-top:3px}
+  .ask{margin-top:12px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 14px;font-size:11.5px;line-height:1.45}
+  .ask b{color:#E9D6AE}
+  .qr{background:#fff;border:2px solid var(--gold);border-radius:12px;padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .qr img{width:140px;height:140px;display:block}
+  .qr .t{font-size:14px;font-weight:800;color:var(--jade);margin-top:4px}
+  .qr .u{font-size:9.5px;color:var(--muted);margin-top:2px;word-break:break-all}
+
+  .sources{margin-top:auto;padding:12px 30px 16px;font-size:9px;color:#6B7A7D;line-height:1.45;border-top:1px solid var(--line)}
+  @media print{
+    @page{size:A4;margin:0}
+    body{background:#fff}
+    .poster{margin:0;box-shadow:none;width:210mm;max-width:none}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+  @media(max-width:700px){
+    .poster{margin:0;aspect-ratio:auto}
+    .hdr{grid-template-columns:1fr}.hdr img{display:none}
+    .stats,.why{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:20px}
+    .two,.impact,.foot{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="poster" data-element-id="canvas">
+
+  <header class="hdr" data-element-id="header">
+    <div>
+      <div class="label">Cathay Hackathon 2026 · Concept demo</div>
+      <h1>Cathay Meal Forecast</h1>
+      <p class="sub">AI forecasting and pre-orders so we stop flying food around the world just to burn it.</p>
+      <p class="tag">Fewer meals in the bin. Same first choice.</p>
+    </div>
+    <img src="assets/meal-tray.png" alt="Illustration of an airline meal tray with a covered hot meal, bread, salad and coffee" data-caption="Inflight meal tray illustration">
+  </header>
+
+  <section class="pad sec" data-element-id="problem">
+    <h2><span class="n">01</span> The problem</h2>
+    <div class="stats">
+      <div class="stat" data-element-id="stat-1"><div class="v">0.94 kg</div><div class="d">cabin waste per passenger, 3.6M tonnes in 2023</div></div>
+      <div class="stat" data-element-id="stat-2"><div class="v">34%</div><div class="d">of cabin waste is untouched food and drink</div></div>
+      <div class="stat" data-element-id="stat-3"><div class="v">US$6B</div><div class="d">of resources incinerated or landfilled every year</div></div>
+      <div class="stat alert" data-element-id="stat-4"><div class="v">Cat. 1</div><div class="d">international catering waste must be burned or buried, not recycled</div></div>
+    </div>
+  </section>
+
+  <section class="pad sec" data-element-id="how">
+    <h2><span class="n">02</span> How it works</h2>
+    <div class="steps">
+      <div class="step" data-element-id="step-1"><div class="k">01</div><div class="t">Pre-order for every cabin</div><div class="d">Choose My Meal opens to Economy. +50 Asia Miles to pre-order, +150 to skip the meal.</div></div>
+      <div class="arrow">→</div>
+      <div class="step" data-element-id="step-2"><div class="k">02</div><div class="t">Forecast per flight, per dish</div><div class="d">Gradient boosting predicts no-shows and dish shares. Pre-orders count as certain demand.</div></div>
+      <div class="arrow">→</div>
+      <div class="step" data-element-id="step-3"><div class="k">03</div><div class="t">Optimise the load</div><div class="d">A newsvendor rule sets each dish's quantity at a chosen service level, so nobody goes hungry.</div></div>
+    </div>
+  </section>
+
+  <section class="pad sec two" data-element-id="sim-bench">
+    <div class="card" data-element-id="sim">
+      <h3>Simulation: CX 251 HKG→LHR, Economy</h3>
+      <div class="cap">1,000+ simulated flights · 241 booked · 95% service level</div>
+      <div data-element-id="sim-bars">
+        <div class="bar-row"><span>Legacy rule</span><div class="track"><div class="fill" style="width:100%;background:#B9C6C4"></div></div><span class="val">27</span></div>
+        <div class="bar-row"><span>AI + pre-order</span><div class="track"><div class="fill" style="width:33%;background:var(--jade)"></div></div><span class="val" style="color:var(--jade)">9</span></div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:-2px">Meals wasted per flight (axis from zero). Meals loaded 255 → 237; first choice 96% → 97%.</div>
+      </div>
+      <table class="dish">
+        <tr><th>Dish</th><th style="text-align:right">Legacy</th><th style="text-align:right">AI load</th></tr>
+        <tr><td>Braised beef noodles</td><td class="n">102</td><td class="n"><span class="dn">75</span></td></tr>
+        <tr><td>Chicken tikka masala</td><td class="n">102</td><td class="n"><span class="up">111</span></td></tr>
+        <tr><td>Mushroom penne (V)</td><td class="n">51</td><td class="n">51</td></tr>
+      </table>
+      <div class="finding" data-element-id="finding-dish"><b>The insight:</b> the fixed-ratio rule loads too much of one dish and too little of the favourite. The AI loads 18 fewer meals, but 9 more of the dish passengers actually choose, so waste drops and service improves at the same time.</div>
+    </div>
+
+    <div class="card" data-element-id="bench">
+      <h3>Is a big cut realistic?</h3>
+      <div class="cap">Reported food-waste reduction (%), axis 0–100</div>
+      <div class="bar-row"><span>KLM AI forecast</span><div class="track"><div class="fill" style="width:63%;background:var(--jade)"></div></div><span class="val">63%</span></div>
+      <div class="bar-row"><span>Winnow kitchens</span><div class="track"><div class="fill" style="width:50%;background:var(--jade-2)"></div></div><span class="val">~50%</span></div>
+      <div class="bar-row"><span>Restaurant ML</span><div class="track"><div class="fill" style="left:14%;width:38%;background:#7FB5AE"></div></div><span class="val">14–52%</span></div>
+      <div class="bar-row"><span>Our simulation</span><div class="track"><div class="fill hatch" style="width:67%"></div></div><span class="val" style="color:var(--gold-d)">67%</span></div>
+      <p style="font-size:11.5px;line-height:1.45;margin-top:10px">Our simulated cut sits right next to KLM's real result. The impact model below still assumes only <b>35%</b> to stay conservative.</p>
+      <p style="font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:8px">Hatched bar = synthetic data, not a measured result. Restaurant ML bar shows the reported range.</p>
+    </div>
+  </section>
+
+  <section class="pad sec" data-element-id="impact">
+    <h2><span class="n">03</span> What Cathay saves every year <span style="font-size:10.5px;color:var(--muted);font-weight:500">illustrative base case</span></h2>
+    <div class="impact">
+      <div class="pillar" data-element-id="impact-cost">
+        <span class="tagp" style="background:var(--gold-bg);color:var(--gold-d)">COST</span>
+        <div class="hero" style="color:var(--gold-d)">US$18.4M</div>
+        <div class="hs">net savings per year, after Asia Miles and platform costs</div>
+        <div class="stack"><div style="width:96.6%;background:var(--gold)"></div><div style="width:1.4%;background:#D9C299"></div><div style="width:2.0%;background:var(--ink)"></div></div>
+        <div class="legend"><span><i style="background:var(--gold)"></i>Meals not produced $20.3M</span><span><i style="background:#D9C299"></i>Fuel $0.3M</span><span><i style="background:var(--ink)"></i>Disposal $0.4M</span></div>
+        <p class="note">About <b>97%</b> of gross savings come from meals that are never cooked. The fuel saving is real but small.</p>
+      </div>
+      <div class="pillar" data-element-id="impact-sus">
+        <span class="tagp" style="background:var(--green-bg);color:var(--green)">SUSTAINABILITY</span>
+        <div class="hero" style="color:var(--green)">1,695 t</div>
+        <div class="hs">of food waste avoided per year · 3.39M meals</div>
+        <div class="stack"><div style="width:77.9%;background:var(--green)"></div><div style="width:22.1%;background:#86C9A0"></div></div>
+        <div class="legend"><span><i style="background:var(--green)"></i>CO₂e embodied in food 4,237 t</span><span><i style="background:#86C9A0"></i>CO₂ from fuel 1,205 t</span></div>
+        <p class="note"><b>5,442 t CO₂e</b> avoided in total. Most of it comes from not producing the food, not from the lighter aircraft.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad sec foot" data-element-id="bottom">
+    <div>
+      <h2><span class="n">04</span> Why Cathay, why now</h2>
+      <div class="why" data-element-id="why">
+        <div class="w"><div class="v">F &amp; J only</div><div class="d">Choose My Meal already feeds catering, but not Economy, where most passengers sit.</div></div>
+        <div class="w"><div class="v">83,800</div><div class="d">meals a day at Cathay Dining for 45+ airlines (2017), a ready B2B channel.</div></div>
+        <div class="w"><div class="v">36M+</div><div class="d">Group passengers in 2025, up 27%. Over-catering grows with every seat.</div></div>
+      </div>
+      <div class="ask" data-element-id="ask"><b>Pilot ask:</b> 3 months on HKG–LHR, LAX and JFK with real load and return data. Target: −30% untouched meals at ≥97% first-choice availability.</div>
+    </div>
+    <div class="qr" data-element-id="qr">
+      <img src="assets/demo-qr-plain.png" alt="QR code linking to the Cathay Meal Forecast demo" data-caption="QR code to the live demo">
+      <div class="t">Scan to try the demo</div>
+      <div class="u">shentonyan.github.io/cathay-meal-forecast</div>
+    </div>
+  </section>
+
+  <div class="sources" data-element-id="sources">
+    <b>Sources:</b> IATA Sustainable Cabin audits and Cabin Waste Fact Sheet (2023–24); EU Reg. 1069/2009 and GOV.UK ICW guidance; KLM TRAYS via Onboard Hospitality and AviationA2Z (2024); Winnow; Aghazadeh (2025) citing Rodrigues et al. (2024); Cathay Pacific Choose My Meal page and news releases (2017, 2025).
+    <b>Caveat:</b> flight, booking and cost figures are synthetic or assumed (25M full-service passengers, 0.17 kg untouched food per passenger, US$6 and 0.5 kg per meal) and shown for illustration only. Not an official Cathay Pacific product.
+  </div>
+</div>
+</body></html>

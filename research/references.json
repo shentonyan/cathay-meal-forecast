@@ -1,0 +1,570 @@
+{
+  "1": {
+    "uri": "https://www.iata.org/policy/environment/pages/cabin-waste.aspx",
+    "evidenceTitle": "IATA Sustainable Cabin",
+    "occurrences": [
+      {
+        "evidence": "the sector generated an average of 0.94 kg of waste per passenger, which translates into 3.6 million tonnes of cabin waste in 2023",
+        "position": 3155
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "2": {
+    "uri": "https://www.iata.org/en/iata-repository/pressroom/fact-sheets/fact-sheet-cabin-waste/",
+    "evidenceTitle": "IATA Fact Sheet",
+    "occurrences": [
+      {
+        "evidence": "34% of cabin waste is untouched food and beverages, representing around $6 billion of resources incinerated or landfilled each year.",
+        "position": 3482
+      },
+      {
+        "evidence": "A major barrier to greater reuse and recycling of cabin waste is International Catering Waste (ICW) legislation adopted by many governments",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "3": {
+    "uri": "https://www.onboardhospitality.com/klm-combats-food-waste-with-ai/",
+    "evidenceTitle": "Onboard Hospitality",
+    "occurrences": [
+      {
+        "evidence": "A three-month analysis shows that 63% less food is wasted compared to catering for every booked passenger.",
+        "position": 3948
+      }
+    ],
+    "type": "WEB",
+    "domain": "onboardhospitality.com"
+  },
+  "4": {
+    "uri": "https://www.cathaypacific.com/cx/en_US/about-us/sustainability/conscious-use-of-resources/news/choose_my_meal.html",
+    "evidenceTitle": "Cathay Pacific",
+    "occurrences": [
+      {
+        "evidence": "insights into passenger consumption patterns and preferential meal options can be used to adjust which meals are produced or loaded onto subsequent flights which can help to reduce food waste.",
+        "position": 4523
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "5": {
+    "uri": "https://flights.cathaypacific.com/en_US/flying-with-us/inflight-dining/choose-my-meal.html",
+    "evidenceTitle": "Choose My Meal",
+    "occurrences": [
+      {
+        "evidence": "Travel in First class and Business class and enjoy our Choose My Meal service.",
+        "position": 4905
+      },
+      {
+        "evidence": "Ordering opens 10 days before the flight, and closes 24 hours before departure, for eligible long-haul and regional flights.",
+        "position": 20565
+      },
+      {
+        "evidence": "Cathay Signatures is available on selected long-haul and regional flights departing from Hong Kong. We'll continue to expand its availability to other routes soon.",
+        "position": 20890
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "6": {
+    "uri": "https://iata.org/en/pressroom/2024-releases/2024-07-04-01",
+    "evidenceTitle": "IATA Press Release",
+    "occurrences": [
+      {
+        "evidence": "with 65% being food and beverage waste. Untouched meals account for 18% of all waste.",
+        "position": 5742
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "7": {
+    "uri": "https://www.iata.org/contentassets/f9f1f10a29524cf68326605e9982bb8d/sustainable-cabin-jon-godson-olga-miltcheva-gmd2022.pdf",
+    "evidenceTitle": "IATA GMD 2022",
+    "occurrences": [
+      {
+        "evidence": "with an inflight catering market of $20 billion(a), the sector is currently incinerating and landfilling $4 billion worth of food & drink.",
+        "position": 6076
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "8": {
+    "uri": "https://aeronauticsmagazine.com/featured/airlines-could-save-millions-per-year-by-letting-ai-decide-how-much-food-to-load-airbus-says",
+    "evidenceTitle": "Aeronautics Magazine",
+    "occurrences": [
+      {
+        "evidence": "with 18% to 20% of all catering materials returning completely untouched — roughly 772,000 tons (700,000 metric tonnes) annually.",
+        "position": 6476
+      },
+      {
+        "evidence": "making preemptive load reduction the only practical means of cutting the waste stream.",
+        "position": 8030
+      },
+      {
+        "evidence": "eliminating just 1 kg (2.2 lb) of unnecessary load across 1,825 annual flights saves approximately $4,210 per year in direct fuel costs.",
+        "position": 8812
+      },
+      {
+        "evidence": "For a fleet averaging a 3,200-lb reduction in catering deadweight, the result is a 2% reduction in maximum takeoff weight and a 1.5% cut in fuel costs.",
+        "position": 18830
+      }
+    ],
+    "type": "WEB",
+    "domain": "aeronauticsmagazine.com"
+  },
+  "9": {
+    "uri": "https://www-int.iata.org/contentassets/821b593dd8cd4f4aa33b63ab9e35368b/joint-statement-towards-smarter-regulation.pdf",
+    "evidenceTitle": "IATA/A4E Joint Statement",
+    "occurrences": [
+      {
+        "evidence": "The current EU legislation (Regulation (EU) 1069/2009) requires that ICW is subject to strict control and treatment by incineration or disposal by deep burial in an authorized landfill.",
+        "position": 7321
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "10": {
+    "uri": "https://www.gov.uk/guidance/handling-and-disposing-of-international-catering-waste",
+    "evidenceTitle": "GOV.UK",
+    "occurrences": [
+      {
+        "evidence": "ICW is classed as a high-risk category 1 animal by-product (ABP).",
+        "position": 7732
+      }
+    ],
+    "type": "WEB",
+    "domain": "gov.uk"
+  },
+  "11": {
+    "uri": "https://iata.org/en/publications/newsletters/iata-knowledge-hub/fuel-efficiency-in-aviation-why-it-matters-more-than-ever",
+    "evidenceTitle": "IATA Knowledge Hub",
+    "occurrences": [
+      {
+        "evidence": "each extra tonne burns about 30 kg per hour.",
+        "position": 8456
+      }
+    ],
+    "type": "WEB",
+    "domain": "iata.org"
+  },
+  "12": {
+    "uri": "https://dergipark.org.tr/en/download/article-file/4159755",
+    "evidenceTitle": "DergiPark",
+    "occurrences": [
+      {
+        "evidence": "The models are trained using a synthetically created dataset of 10,000 records and 15 features, which include factors such as meal type, waste weight, and passenger number.",
+        "position": 9652
+      },
+      {
+        "evidence": "models can effectively forecast inflight food waste, with RFR being more adaptable to complicated patterns.",
+        "position": 10015
+      },
+      {
+        "evidence": "The authors develop a stochastic and multi-objective decision-making model that seeks to discover the most efficient combination of meals to order for a certain trip",
+        "position": 12293
+      },
+      {
+        "evidence": "demand uncertainty has a substantial impact on waste rise in the production area.",
+        "position": 13165
+      },
+      {
+        "evidence": "They evaluate 145 airplanes, separated by flight time and passenger class, and categorized and described the waste into 20 distinct elements.",
+        "position": 13424
+      },
+      {
+        "evidence": "giving passengers the choice of reserving or not booking their meals when booking their flights might help to decrease food waste and losses.",
+        "position": 13750
+      },
+      {
+        "evidence": "can result in a 14% to 52% reduction in the number of wasted meals and a 3% to 16% reduction in unmet demand when compared to baseline model projections.",
+        "position": 14411
+      },
+      {
+        "evidence": "Machine learning-based inflight food waste prediction for sustainable aviation Duygu Aghazadeh",
+        "position": -1
+      },
+      {
+        "evidence": "(Hast, 2019) compares machine learning algorithms (MLAs) for forecasting consumer demand for inflight meals and identifies relevant data elements for this prediction.",
+        "position": -1
+      },
+      {
+        "evidence": "The study delves into the utilization of machine learning to predict and reduce inflight food waste, improving sustainability in aviation logistics.",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "org.tr"
+  },
+  "13": {
+    "uri": "https://www.dglr.de/publikationen/2025/650481.pdf",
+    "evidenceTitle": "DGLR 2025",
+    "occurrences": [
+      {
+        "evidence": "For the FRA to DEL passenger-specific dataset, 413,574 data samples with a size of 44,633 Kilobyte (KB) were generated.",
+        "position": 10386
+      },
+      {
+        "evidence": "this study shows that a good prediction of catering demand that avoids overstocking of meals and beverages can be achieved.",
+        "position": 10707
+      },
+      {
+        "evidence": "a study from the IATA emphasizes the potential of pre-selection of In-flight meals and real-time in-ventory management in minimizing meals and beverage overload",
+        "position": 14042
+      },
+      {
+        "evidence": "approximately 24% of Indian are vegetarians, influencing veg meal preferences. On the other side, the research by Gallup [9] suggests that only 4% of Americans are vegetarian",
+        "position": 14872
+      },
+      {
+        "evidence": "Real world catering on the consumption are practically non-existent and represent a major challenge for the development of machine learning (ML) -based predictive models",
+        "position": 15377
+      },
+      {
+        "evidence": "5.7 million tons of cabin waste were generated worldwide in 2017, with uneaten meals and beverages accounting about 20% of this.",
+        "position": -1
+      },
+      {
+        "evidence": "Southwest Airlines reports saving 33 million gallons of fuel through on-board weight reduction.",
+        "position": -1
+      },
+      {
+        "evidence": "passenger-level features such as gender, age, flight details, nationality, meal and beverage choices, and aggregated journey-level features including total passenger count, gender and age group distribution, nationality profile, class distribution",
+        "position": -1
+      },
+      {
+        "evidence": "This research paper focuses on overcoming the challenges posed by unavailability of in-flight catering data and enabling on-board consumption prediction.",
+        "position": -1
+      },
+      {
+        "evidence": "Generating Synthetic Data for Machine Learning to Optimize Catering Weight",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "dglr.de"
+  },
+  "14": {
+    "uri": "https://dergipark.org.tr/en/download/article-file/5021241",
+    "evidenceTitle": "IJONFEST",
+    "occurrences": [
+      {
+        "evidence": "The data set taken to train the model includes detailed information about approximately 180,000 flights.",
+        "position": 11024
+      },
+      {
+        "evidence": "The accuracy rate of the developed model shows that the model has a general prediction ability according to the initial findings.",
+        "position": 11318
+      },
+      {
+        "evidence": "traditional methods do not sufficiently take into account dynamic factors such as seasonal changes and passenger profiles",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "org.tr"
+  },
+  "15": {
+    "uri": "https://www.researchgate.net/publication/2407094_Coffee_Tea_or_A_Markov_Decision_Process_Model_for_Airline_Meal_Provisioning",
+    "evidenceTitle": "ResearchGate",
+    "occurrences": [
+      {
+        "evidence": "This paper develops and analyzes a finite horizon Markov decision process model for the airline meal provisioning activity focusing explicitly on developing policies for determining and revising the number of meals to upload.",
+        "position": 11722
+      }
+    ],
+    "type": "WEB",
+    "domain": "researchgate.net"
+  },
+  "16": {
+    "uri": "https://www.mdpi.com/2071-1050/12/20/8571/html",
+    "evidenceTitle": "MDPI",
+    "occurrences": [
+      {
+        "evidence": "Four types of factors were found to influence onboard passenger waste, these were normative, habitual, intentional and situational factors.",
+        "position": 12760
+      }
+    ],
+    "type": "WEB",
+    "domain": "mdpi.com"
+  },
+  "17": {
+    "uri": "https://www.mdpi.com/2226-4310/9/11/736/pdf?version=1669171985",
+    "evidenceTitle": "MDPI Aerospace",
+    "occurrences": [
+      {
+        "evidence": "Individualisation of Inflight Catering Meals—An Automation Concept for Integrating Pre-Ordered Meals during the Flight for All Passengers",
+        "position": 15689
+      }
+    ],
+    "type": "WEB",
+    "domain": "mdpi.com"
+  },
+  "18": {
+    "uri": "https://aviationa2z.com/index.php/2024/02/06/klm-using-artificial-intelligence-to-reduce-food-waste/",
+    "evidenceTitle": "AviationA2Z",
+    "occurrences": [
+      {
+        "evidence": "a decrease of 2.5 meals (1.3 kg) wasted per flight. This results in an annual saving of 111,000 kg of meals",
+        "position": 17020
+      }
+    ],
+    "type": "WEB",
+    "domain": "aviationa2z.com"
+  },
+  "19": {
+    "uri": "https://www.travelweekly.com/Travel-News/Airline-News/AI-solutions-waste-reduction-airline-catering",
+    "evidenceTitle": "Travel Weekly",
+    "occurrences": [
+      {
+        "evidence": "AI recognizes whether each meal has been partially eaten, completely eaten or left untouched. The route and cabin class are also included in the analysis.",
+        "position": 17383
+      }
+    ],
+    "type": "WEB",
+    "domain": "travelweekly.com"
+  },
+  "20": {
+    "uri": "https://www.pax-intl.com/assets/pdf/passenger-services/catering/emirates-now-offers-inflight-meal-preordering-service-across-92-destinations.pdf",
+    "evidenceTitle": "PAX International",
+    "occurrences": [
+      {
+        "evidence": "preselect their main course between 14 days and 24 hours in advance of their ﬂight departure, ensuring they get their preferred choice every time as well as helping to reduce food wastage.",
+        "position": 17792
+      }
+    ],
+    "type": "WEB",
+    "domain": "pax-intl.com"
+  },
+  "21": {
+    "uri": "https://simpleflying.com/japan-airlines-plane-food-fertilizer/",
+    "evidenceTitle": "Simple Flying",
+    "occurrences": [
+      {
+        "evidence": "In December 2020, it introduced the “Ethical Choice – Meal Skip Option,” which encouraged passengers to inform the carrier in advance if they wanted to forego a meal.",
+        "position": 18277
+      }
+    ],
+    "type": "WEB",
+    "domain": "simpleflying.com"
+  },
+  "22": {
+    "uri": "https://www.winnowsolutions.com/",
+    "evidenceTitle": "Winnow",
+    "occurrences": [
+      {
+        "evidence": "Across 3,500+ locations in 90+ countries, clients cut food waste by half and food costs by 2 to 8%.",
+        "position": 19318
+      }
+    ],
+    "type": "WEB",
+    "domain": "winnowsolutions.com"
+  },
+  "23": {
+    "uri": "https://viewfromthewing.com/startup-pitched-emirates-on-business-class-meal-preorders-new-lawsuit-says-the-airline-stole-the-tech/",
+    "evidenceTitle": "View from the Wing",
+    "occurrences": [
+      {
+        "evidence": "Emirates is being sued for stealing the technology behind passengers ordering their meals in advance of travel.",
+        "position": 19839
+      }
+    ],
+    "type": "WEB",
+    "domain": "viewfromthewing.com"
+  },
+  "24": {
+    "uri": "https://news.cathaypacific.com/what-happens-to-unused-inflight-food",
+    "evidenceTitle": "Cathay Pacific News",
+    "occurrences": [
+      {
+        "evidence": "Cathay Pacific Catering Services (CPCS), which handles catering for more than 45 airlines that fly from Hong Kong, produce around 83,800 meals per day.",
+        "position": 21338
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "25": {
+    "uri": "https://news.cathaypacific.com/cathay-and-feeding-hong-kong-celebrate-over-10-years-of-being-a-positive-force-for-the-community-together",
+    "evidenceTitle": "Cathay Pacific News",
+    "occurrences": [
+      {
+        "evidence": "Since the programme's launch in 2014, 2,250 tonnes of food have been collected and redistributed to people in need, benefitting 260,000 individuals over the past decade.",
+        "position": 21831
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "26": {
+    "uri": "https://www.aviationbusinessnews.com/cabin/latest-news/cathay-dining-increases-food-recycling-capacity-with-warewash-system",
+    "evidenceTitle": "Aviation Business News",
+    "occurrences": [
+      {
+        "evidence": "the Cathay Group subsidiary previously known as Cathay Pacific Catering services, has increased its food waste recycling capacity by 200%.",
+        "position": 22265
+      },
+      {
+        "evidence": "The collected food waste is transferred to the Organic Resources Recovery Centre (O·PARK) nearby for anaerobic digestion and electricity generation.",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "aviationbusinessnews.com"
+  },
+  "27": {
+    "uri": "https://news.cathaypacific.com/cathay-continues-to-advance-its-sustainability-priorities-through-strategic-investments-and-collaborative-actions-d76ony",
+    "evidenceTitle": "Cathay Pacific News",
+    "occurrences": [
+      {
+        "evidence": "In 2025, the Group reduced passenger-facing SUP items in scope to an average of 1.7 pieces per passenger, with further progress towards the target of 1.5 pieces expected by mid‑2026",
+        "position": 22721
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "28": {
+    "uri": "https://news.cathaypacific.com/the-cathay-group-releases-traffic-figures-for-december-2025-rlwglu",
+    "evidenceTitle": "Cathay traffic figures",
+    "occurrences": [
+      {
+        "evidence": "In 2025 as a whole, Cathay Pacific and HK Express carried a combined total of more than 36 million passengers, representing a 27% year-on-year increase.",
+        "position": 23686
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "29": {
+    "uri": "https://www.cathaypacific.com/cx/en_JP/inspiration/cathay-stories/everything-need-to-know-cathay-hackathon-2024.html",
+    "evidenceTitle": "Cathay Hackathon",
+    "occurrences": [
+      {
+        "evidence": "Through this event we bring in external technology, ideas, and suggestions into Cathay",
+        "position": 24124
+      }
+    ],
+    "type": "WEB",
+    "domain": "cathaypacific.com"
+  },
+  "30": {
+    "uri": "https://github.com/asgard-ai-platform/skills/blob/main/algo-sc-newsvendor/SKILL.md",
+    "evidenceTitle": "Newsvendor reference",
+    "occurrences": [
+      {
+        "evidence": "Optimal Q* satisfies: P(D ≤ Q*) = Cu / (Cu + Co). Known as the critical ratio solution.",
+        "position": 25554
+      },
+      {
+        "evidence": "Optimal Q* satisfies: P(D \\u2264 Q*) = Cu / (Cu + Co). Known as the critical ratio solution.",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "github.com"
+  },
+  "31": {
+    "uri": "https://metricgate.com/docs/newsvendor-critical-fractile/",
+    "evidenceTitle": "MetricGate",
+    "occurrences": [
+      {
+        "evidence": "the optimal order quantity is the demand quantile at that ratio.",
+        "position": 25829
+      }
+    ],
+    "type": "WEB",
+    "domain": "metricgate.com"
+  },
+  "32": {
+    "uri": "https://metricgate.com/blogs/newsvendor-single-period-stocking-r/",
+    "evidenceTitle": "MetricGate",
+    "occurrences": [
+      {
+        "evidence": "It deliberately tilts the order quantity toward whichever error is cheaper to make",
+        "position": 26043
+      }
+    ],
+    "type": "WEB",
+    "domain": "metricgate.com"
+  },
+  "33": {
+    "uri": "https://dev.opensky-network.org/data",
+    "evidenceTitle": "OpenSky Network",
+    "occurrences": [
+      {
+        "evidence": "ranging from real-time APIs to historical archives and curated scientific datasets.",
+        "position": 26747
+      }
+    ],
+    "type": "WEB",
+    "domain": "opensky-network.org"
+  },
+  "34": {
+    "uri": "https://www.aircraftit.com/articles/a-new-approach-to-cost-of-weight-cow/",
+    "evidenceTitle": "AircraftIT",
+    "occurrences": [
+      {
+        "evidence": "the historical value of the cost of weight which is between 2.5 % and 5% per flight hour.",
+        "position": 28015
+      }
+    ],
+    "type": "WEB",
+    "domain": "aircraftit.com"
+  },
+  "35": {
+    "uri": "https://www.onboardhospitality.com/meal-planning/",
+    "evidenceTitle": "Onboard Hospitality",
+    "occurrences": [
+      {
+        "evidence": "the percentage of air passengers who pre-order their inflight meals is believed to be less than 5%. Some believe the figure is as low as 2%.",
+        "position": 29136
+      },
+      {
+        "evidence": "It stops inventory being needlessly packed, loaded and flown from destination to destination at great cost and with no revenue generation",
+        "position": 29435
+      },
+      {
+        "evidence": "F&B accounts for 65% of cabin and catering waste, with untouched meals accounting for 18% of all waste.",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "onboardhospitality.com"
+  },
+  "36": {
+    "uri": "https://wisevoter.com/world/2026/09/26/klm-updates-economy-class-service",
+    "evidenceTitle": "Wisevoter",
+    "occurrences": [
+      {
+        "evidence": "Passengers can pre-order meals for flights exceeding 75 minutes through the My Trip booking platform.",
+        "position": 29728
+      },
+      {
+        "evidence": "internal audits showed that 25 to 30 percent of sandwiches served on flights were left uneaten.",
+        "position": -1
+      }
+    ],
+    "type": "WEB",
+    "domain": "wisevoter.com"
+  },
+  "37": {
+    "uri": "https://www.theseus.fi/bitstream/handle/10024/905181/Karlson_Tomi.pdf?isAllowed=y&sequence=2",
+    "evidenceTitle": "Theseus (Finnair thesis)",
+    "occurrences": [
+      {
+        "evidence": "Pre-ordered and pre-paid meals have emerged as a strategic opportunity to enhance cus-tomer experience, reduce food waste, and generate additional revenue for airlines.",
+        "position": 30050
+      }
+    ],
+    "type": "WEB",
+    "domain": "theseus.fi"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+src/pitch-deck/.icons/
+__pycache__/
+.DS_Store
+Thumbs.db
