@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cathay Meal Forecast · Zero-Waste Inflight Catering Demo</title>
 <meta name="description" content="Cathay Hackathon 2026 demo: AI meal forecasting and pre-order to cut inflight food waste and cost.">
-<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts-more.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/modules/accessibility.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts-more.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/modules/accessibility.js"></script>
 <style>
 :root{
   --jade:#006564; --jade-2:#00857f; --jade-bg:#e6f1ef; --jade-line:#cfe3df;
@@ -28,7 +28,8 @@ nav button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#
 nav button:hover{background:rgba(255,255,255,.12)}
 nav button.active{background:#fff;color:var(--jade);border-color:#fff;font-weight:600}
 main{max-width:1240px;margin:0 auto;padding:24px 24px 60px}
-.tab{display:none}.tab.active{display:block;animation:fade .3s ease-out}
+.tab{display:none}.tab.active{display:block;animation:fade .3s ease-out}.tab[hidden]{display:none}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 h2{margin:0 0 4px;font-size:22px;color:var(--jade)}
 .lead{margin:0 0 20px;color:var(--ink-2);font-size:14.5px;max-width:900px;line-height:1.55}
@@ -127,21 +128,22 @@ input[type=range]{width:100%;accent-color:var(--jade)}
   td,th{padding:7px 6px}
 }
 .pubfoot{max-width:1240px;margin:0 auto;padding:0 24px 28px;font-size:12px;color:var(--muted);line-height:1.5}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand"><div class="logo">✈</div><div>CATHAY · MEAL FORECAST<small>Zero-waste inflight catering · Hackathon demo</small></div></div>
-  <nav>
-    <button data-tab="t1" class="active">① Passenger app</button>
-    <button data-tab="t2">② Flight forecast</button>
-    <button data-tab="t3">③ Impact dashboard</button>
+  <nav role="tablist" aria-label="Demo sections">
+    <button id="tab-t1" data-tab="t1" class="active" role="tab" aria-selected="true" aria-controls="t1">① Passenger app</button>
+    <button id="tab-t2" data-tab="t2" role="tab" aria-selected="false" aria-controls="t2" tabindex="-1">② Flight forecast</button>
+    <button id="tab-t3" data-tab="t3" role="tab" aria-selected="false" aria-controls="t3" tabindex="-1">③ Impact dashboard</button>
   </nav>
 </header>
 
 <main>
 <!-- ============ TAB 1: PASSENGER ============ -->
-<section class="tab active" id="t1">
+<section class="tab active" id="t1" role="tabpanel" aria-labelledby="tab-t1" tabindex="0">
   <h2>Choose My Meal, for every cabin</h2>
   <p class="lead">Today Choose My Meal is open to First and Business only. In this concept, every passenger can pre-order or skip their meal 10 days to 24 hours before departure and earn Asia Miles for doing it. Each choice becomes a firm demand signal for the forecasting model.</p>
   <div class="pwrap">
@@ -175,15 +177,15 @@ input[type=range]{width:100%;accent-color:var(--jade)}
 </section>
 
 <!-- ============ TAB 2: FORECAST ============ -->
-<section class="tab" id="t2">
+<section class="tab" id="t2" role="tabpanel" aria-labelledby="tab-t2" tabindex="0" hidden>
   <h2>Flight forecast &amp; loading optimiser</h2>
   <p class="lead">For each flight the model predicts the boarded passenger count and a demand <i>distribution</i> for each dish. A newsvendor rule then loads the quantile of total meal demand that matches the chosen service level, and splits stock across dishes to protect first choices. Below, it is compared with the legacy rule (cater for 100% of bookings × fixed network ratio + 5% buffer) over 1,000 simulated flights.</p>
   <div class="controls">
-    <div class="f">Flight<select id="fSel"></select></div>
-    <div class="f">Cabin<select id="cSel"><option value="eco">Economy</option><option value="biz">Business</option></select></div>
+    <div class="f"><label for="fSel">Flight</label><select id="fSel"></select></div>
+    <div class="f"><label for="cSel">Cabin</label><select id="cSel"><option value="eco">Economy</option><option value="biz">Business</option></select></div>
     <div class="f" style="min-width:300px;flex:1">
       <div class="sl" style="margin:0"><div class="top"><span>Service level: chance every passenger gets a meal (newsvendor critical ratio)</span><b id="slv">95%</b></div>
-      <input type="range" id="slSel" min="60" max="99" value="95"></div>
+      <input type="range" id="slSel" min="60" max="99" value="95" aria-label="Service level: chance every passenger gets a meal"></div>
     </div>
     <button class="btn" id="runSim">▶ Simulate 1,000 flights</button>
   </div>
@@ -204,7 +206,7 @@ input[type=range]{width:100%;accent-color:var(--jade)}
 </section>
 
 <!-- ============ TAB 3: DASHBOARD ============ -->
-<section class="tab" id="t3">
+<section class="tab" id="t3" role="tabpanel" aria-labelledby="tab-t3" tabindex="0" hidden>
   <h2>Network impact: what Cathay saves every year</h2>
   <p class="lead">Scaled to the whole network, this shows two outcomes, <b style="color:var(--gold)">cost savings</b> and <b style="color:var(--green)">sustainability</b>. Adjust the assumptions on the left; every number updates live.</p>
   <div class="dash">
@@ -240,6 +242,7 @@ input[type=range]{width:100%;accent-color:var(--jade)}
 <div class="pubfoot">Cathay Hackathon 2026 concept demo. All flights, bookings, dish shares and costs are synthetic and illustrative; benchmarks from IATA and KLM are cited in the research report. Not an official Cathay Pacific product.<br><a href="poster.html" style="color:var(--jade)">Poster</a> &middot; <a href="research.html" style="color:var(--jade)">Research report</a></div>
 
 <script>
+window.addEventListener('DOMContentLoaded', () => {
 /* ===================== DATA ===================== */
 const LEGACY = {eco:[0.40,0.40,0.20], biz:[0.30,0.30,0.25,0.15]};
 const FLIGHTS = [
@@ -335,13 +338,26 @@ function runMC(f,cab,pl,n){
 
 /* ===================== TAB SWITCH ===================== */
 const charts={};
+const tabButtons=[...document.querySelectorAll('nav button')];
 function show(t){
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
-  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.id===t));
-  window.scrollTo({top:0,behavior:'smooth'});
+  tabButtons.forEach(b=>{const active=b.dataset.tab===t;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
+  document.querySelectorAll('.tab').forEach(s=>{const active=s.id===t;s.classList.toggle('active',active);s.hidden=!active;});
+  if(t==='t2')renderForecast();
+  if(t==='t3')calc();
+  window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   setTimeout(()=>Object.values(charts).forEach(c=>c&&c.reflow&&c.reflow()),60);
 }
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+tabButtons.forEach((b,i)=>{
+  b.onclick=()=>show(b.dataset.tab);
+  b.onkeydown=e=>{
+    let next=null;
+    if(e.key==='ArrowRight')next=(i+1)%tabButtons.length;
+    if(e.key==='ArrowLeft')next=(i-1+tabButtons.length)%tabButtons.length;
+    if(e.key==='Home')next=0;
+    if(e.key==='End')next=tabButtons.length-1;
+    if(next!=null){e.preventDefault();show(tabButtons[next].dataset.tab);tabButtons[next].focus();}
+  };
+});
 
 Highcharts.setOptions({chart:{style:{fontFamily:"'Segoe UI',Roboto,Arial,sans-serif"},backgroundColor:'transparent'},credits:{enabled:false},title:{text:null},
   colors:['#c9cfcd','#006564','#b8955a','#1f9d61','#d0443a'],legend:{itemStyle:{fontWeight:'500',color:'#4d5c5c'}}});
@@ -422,14 +438,28 @@ function renderForecast(){
   C.d.forEach((d,i)=>t+=`<tr><td>${d[0]} ${d[1]}</td><td class="n">${C.pre[i]}</td><td class="n">${fmt(C.pre[i]+P.mu[i],0)} ± ${fmt(P.sd[i],1)}</td><td class="n">${P.legacy[i]}</td><td class="n"><b>${P.ai[i]}</b></td></tr>`);
   document.getElementById('dishTbl').innerHTML=t;
   const cats=C.d.map(d=>d[0]+' '+d[1]);
-  const opts={chart:{type:'column'},xAxis:{categories:cats,labels:{style:{fontSize:'11px'}}},yAxis:{title:{text:'Meals'}},
-    tooltip:{shared:true},plotOptions:{column:{borderRadius:3,groupPadding:0.12}},
-    series:[{name:'Legacy load',data:P.legacy,color:'#c9cfcd'},{name:'AI load',data:P.ai,color:'#006564'},
-      {name:'Expected demand',type:'errorbar',data:C.d.map((_,i)=>[Math.max(0,C.pre[i]+P.mu[i]-P.sd[i]),C.pre[i]+P.mu[i]+P.sd[i]]),color:'#b8955a',stemWidth:2,whiskerLength:14,tooltip:{pointFormat:'Demand ±1σ: <b>{point.low:.0f}–{point.high:.0f}</b><br/>'}}]};
-  if(charts.load){charts.load.destroy();} charts.load=Highcharts.chart('loadChart',opts);
+  if(document.getElementById('t2').classList.contains('active')){
+    const demand=C.d.map((_,i)=>[Math.max(0,C.pre[i]+P.mu[i]-P.sd[i]),C.pre[i]+P.mu[i]+P.sd[i]]);
+    if(!charts.load){
+      charts.load=Highcharts.chart('loadChart',{chart:{type:'column'},xAxis:{categories:cats,labels:{style:{fontSize:'11px'}}},yAxis:{title:{text:'Meals'}},
+        tooltip:{shared:true},plotOptions:{column:{borderRadius:3,groupPadding:0.12}},
+        series:[{name:'Legacy load',data:P.legacy,color:'#c9cfcd'},{name:'AI load',data:P.ai,color:'#006564'},
+          {name:'Expected demand',type:'errorbar',data:demand,color:'#b8955a',stemWidth:2,whiskerLength:14,tooltip:{pointFormat:'Demand ±1σ: <b>{point.low:.0f}–{point.high:.0f}</b><br/>'}}]});
+    }else{
+      charts.load.xAxis[0].setCategories(cats,false);
+      charts.load.series[0].setData(P.legacy,false);
+      charts.load.series[1].setData(P.ai,false);
+      charts.load.series[2].setData(demand,false);
+      charts.load.redraw();
+    }
+  }
 }
 [fSel,cSel].forEach(e=>e.onchange=()=>{renderForecast();clearSim();});
-slSel.oninput=()=>{renderForecast();};
+let forecastFrame=0;
+slSel.oninput=()=>{
+  if(forecastFrame)return;
+  forecastFrame=requestAnimationFrame(()=>{forecastFrame=0;renderForecast();});
+};
 function clearSim(){document.getElementById('simRes').innerHTML='<p class="note">Press <b>Simulate 1,000 flights</b> to compare.</p>';if(charts.trade){charts.trade.destroy();charts.trade=null;}document.getElementById('toDash').disabled=true;}
 document.getElementById('runSim').onclick=()=>{
   const btn=document.getElementById('runSim'); btn.disabled=true; btn.textContent='Simulating…';
@@ -455,7 +485,7 @@ document.getElementById('runSim').onclick=()=>{
     btn.disabled=false; btn.textContent='▶ Simulate 1,000 flights';
   },30);
 };
-document.getElementById('toDash').onclick=()=>{ if(lastRed!=null){S.red.v=Math.round(Math.min(80,Math.max(5,lastRed*100*0.6)));buildSliders();calc();} show('t3'); };
+document.getElementById('toDash').onclick=()=>{ if(lastRed!=null){S.red.v=Math.round(Math.min(80,Math.max(5,lastRed*100*0.6)));buildSliders();} show('t3'); };
 
 /* ===================== TAB 3: DASHBOARD ===================== */
 const S={
@@ -470,13 +500,18 @@ const S={
 };
 const PRE={cons:{red:20,up:5},base:{red:35,up:15},amb:{red:63,up:30}};
 const K={preEff:0.5,pack:1.5,co2f:3.16,embodied:2.5,disp:250,miles:50,mileCost:0.006,platform:1.5e6,car:4.6};
+let calcFrame=0;
+function scheduleCalc(){
+  if(calcFrame)return;
+  calcFrame=requestAnimationFrame(()=>{calcFrame=0;calc();});
+}
 function buildSliders(){
   let h='';for(const [k,o] of Object.entries(S)){
     const disp=o.u.trim()==='US$'?'$'+o.v:o.v+o.u;
-    h+=`<div class="sl"><div class="top"><span>${o.l}</span><b id="v_${k}">${disp}</b></div><input type="range" min="${o.min}" max="${o.max}" step="${o.st}" value="${o.v}" data-k="${k}"></div>`;}
+    h+=`<div class="sl"><div class="top"><label for="sl_${k}">${o.l}</label><b id="v_${k}">${disp}</b></div><input id="sl_${k}" type="range" min="${o.min}" max="${o.max}" step="${o.st}" value="${o.v}" data-k="${k}"></div>`;}
   const el=document.getElementById('sliders');el.innerHTML=h;
   el.querySelectorAll('input').forEach(i=>i.oninput=()=>{const o=S[i.dataset.k];o.v=+i.value;document.getElementById('v_'+i.dataset.k).textContent=o.u.trim()==='US$'?'$'+o.v:o.v+o.u;
-    document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('on'));calc();});
+    document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('on'));scheduleCalc();});
 }
 document.querySelectorAll('.presets button').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];S.red.v=p.red;S.up.v=p.up;
   document.querySelectorAll('.presets button').forEach(x=>x.classList.toggle('on',x===b));buildSliders();calc();});
@@ -492,8 +527,15 @@ function model(scale=1, upScale=1){
   const cInc=pax*up*K.miles*K.mileCost, cPlat=K.platform*(scale>0?1:0);
   return {pax,red,baseT:baseKg/1000,foodT:foodKg/1000,meals,fuelT,co2Fuel,co2Food,sMeal,sFuel,sDisp,cInc,cPlat,net:sMeal+sFuel+sDisp-cInc-cPlat};
 }
-function animate(el,to,f){const from=+(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();
-  function step(t){const k=Math.min(1,(t-t0)/450),e=1-Math.pow(1-k,3);el.textContent=f(from+(to-from)*e);if(k<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+const animationFrames=new WeakMap();
+function animate(el,to,f){
+  const previous=animationFrames.get(el);if(previous)cancelAnimationFrame(previous);
+  const from=+(el.dataset.v||0);el.dataset.v=to;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=f(to);return;}
+  const t0=performance.now();
+  function step(t){const k=Math.min(1,(t-t0)/450),e=1-Math.pow(1-k,3);el.textContent=f(from+(to-from)*e);if(k<1)animationFrames.set(el,requestAnimationFrame(step));}
+  animationFrames.set(el,requestAnimationFrame(step));
+}
 function calc(){
   const M=model();
   const kp=document.getElementById('dashKpis');
@@ -526,6 +568,7 @@ function calc(){
     <div class="li"><span>🌾 CO₂e embodied in food production</span><b>${fmt(M.co2Food,0)} t</b></div>
     <div class="li tot"><span>Total CO₂e avoided</span><b style="color:var(--green)">${fmt(M.co2Fuel+M.co2Food,0)} t</b></div>`;
 
+  if(document.getElementById('t3').classList.contains('active')){
   const wf=[{name:'Meals',y:M.sMeal/1e6,color:'#b8955a'},{name:'Fuel',y:M.sFuel/1e6,color:'#c9a874'},{name:'Disposal',y:M.sDisp/1e6,color:'#d9c299'},
     {name:'Miles cost',y:-M.cInc/1e6,color:'#d0443a'},{name:'Platform',y:-M.cPlat/1e6,color:'#e07a72'},{name:'Net',isSum:true,color:'#006564'}];
   if(charts.wf){charts.wf.series[0].setData(wf,true);}else{
@@ -548,10 +591,12 @@ function calc(){
     charts.mon=Highcharts.chart('monthChart',{chart:{type:'areaspline'},xAxis:{categories:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']},
       yAxis:{title:{text:'Tonnes'}},tooltip:{shared:true,valueSuffix:' t'},plotOptions:{areaspline:{fillOpacity:0.25,marker:{enabled:false}}},
       series:[{name:'Legacy loading',data:leg,color:'#d0443a'},{name:'AI-optimised',data:ai,color:'#006564'}]});}
+  }
 }
 
 /* ===================== INIT ===================== */
-renderPhone(); renderLive(); renderForecast(); buildSliders(); calc();
+renderPhone(); renderLive(); buildSliders();
+});
 </script>
 </body>
 </html>
